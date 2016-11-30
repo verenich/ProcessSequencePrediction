@@ -85,8 +85,6 @@ step = 1
 sentences = []
 softness = 0
 next_chars = []
-#lines = text.splitlines()
-#lines = map(lambda x: '{'+x+'}',lines)
 lines = map(lambda x: x+'!',lines)
 maxlen = max(map(lambda x: len(x),lines))
 
@@ -95,13 +93,11 @@ chars = list(set().union(*chars))
 chars.sort()
 target_chars = copy.copy(chars)
 chars.remove('!')
-#target_chars.remove('{')
 print('total chars: {}, target chars: {}'.format(len(chars), len(target_chars)))
 char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 target_char_indices = dict((c, i) for i, c in enumerate(target_chars))
 target_indices_char = dict((i, c) for i, c in enumerate(target_chars))
-#indices_char[len(target_chars)] = '{'
 print(indices_char)
 
 
@@ -161,13 +157,11 @@ fold3 = lines[2*elems_per_fold:]
 fold3_t = timeseqs[2*elems_per_fold:]
 fold3_t2 = timeseqs2[2*elems_per_fold:]
 fold3_t3 = timeseqs3[2*elems_per_fold:]
-#fold3_t4 = timeseqs4[2*elems_per_fold:]
 
 lines = fold3
 lines_t = fold3_t
 lines_t2 = fold3_t2
 lines_t3 = fold3_t3
-#lines_t4 = fold1_t4 + fold2_t4
 
 # set parameters
 predict_size = 1
@@ -231,42 +225,22 @@ with open('output_files/folds/fold3_preds.csv', 'wb') as csvfile:
             if len(times2)<prefix_size:
                 continue # make no prediction for this case, since this case has ended already
             ground_truth = ''.join(line[prefix_size:prefix_size+predict_size])
-            #print(map(lambda x: x.encode('utf-8'), line))
-            #print(map(lambda x: x.encode('utf-8'), cropped_line))
-            #print(times2)
             ground_truth_t = times2[prefix_size-1]
             case_end_time = times2[len(times2)-1]
             ground_truth_t = case_end_time-ground_truth_t
-            #print('times: {}'.format(times))
-            #print('gt: {}'.format(ground_truth_t))
             predicted = ''
-            #print(ground_truth_t)
-            #print(predicted_t)
-            #print(cropped_times)
-            #print('curr len: {}'.format(len(cropped_line)))
-            #print('line len: {}'.format(len(line)))
             total_predicted_time = 0
             for i in range(predict_size):
                 enc = encode(cropped_line, cropped_times, cropped_times3)
-                #print(ground_truth_t[i])
-                y = model.predict(enc, verbose=0)
-                #print(y)
-                #print('y:      {}'.format(y))
-                y_char = y[0][0]
-                #print('y_char: {}'.format(y_char))
+                y = model.predict(enc, verbose=0) # make predictions
+                # split predictions into seperate activity and time predictions
+                y_char = y[0][0] 
                 y_t = y[1][0][0]
-                #print('y_t: {}'.format(y_t))
-                prediction = getSymbol(y_char)
-                
-                #prediction = ground_truth[i]
-                #y_t = ground_truth_t[i]/divisor
-              
+                prediction = getSymbol(y_char) # undo one-hot encoding           
                 cropped_line += prediction
                 if y_t<0:
                     y_t=0
                 cropped_times.append(y_t)
-                
-                # add y_t seconds to cropped_times3
                 if prediction == '!': # end of case was just predicted, therefore, stop predicting further into the future
                     one_ahead_pred.append(total_predicted_time)
                     one_ahead_gt.append(ground_truth_t)
@@ -290,24 +264,3 @@ with open('output_files/folds/fold3_preds.csv', 'wb') as csvfile:
                 output.append(metrics.mean_absolute_error([ground_truth_t], [total_predicted_time]))
                 output.append(metrics.median_absolute_error([ground_truth_t], [total_predicted_time]))
                 spamwriter.writerow(output)
-
-fig = plt.figure()        
-ax1 = fig.add_subplot(311)
-#ax1.title.set_text('predictions 1 event ahead')
-#ax1.set_xlabel('ground truth time since last event')
-#ax1.set_ylabel('predicted time since last event')
-ax1 = plt.scatter(one_ahead_gt, one_ahead_pred)
-#ax1.plot([0, 0], [600000, 600000], 'k-')
-ax2 = fig.add_subplot(312)
-ax2 = plt.scatter(two_ahead_gt, two_ahead_pred)
-#ax2.title.set_text('predictions 2 events ahead')
-#ax2.set_xlabel('ground truth time since last event')
-#ax2.set_ylabel('predicted time since last event')
-#ax2.plot([0, 0], [600000, 600000], 'k-')
-ax3 = fig.add_subplot(313)
-ax3 = plt.scatter(three_ahead_gt, three_ahead_pred)
-#ax3.title.set_text('predictions 3 events ahead')
-#ax3.set_xlabel('ground truth time since last event')
-#ax3.set_ylabel('predicted time since last event')
-#ax3.plot([0, 0], [600000, 600000], 'k-')
-plt.show()
