@@ -1,6 +1,8 @@
 '''
 It is recommended to run this script on GPU, as recurrent
 networks are quite computationally intensive.
+
+Author: Niek Tax
 '''
 
 from __future__ import print_function, division
