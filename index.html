@@ -19,54 +19,35 @@
     </section>
 
     <section class="main-content">
-      <p>Following are the supplementary material for the article <a href="http://link.springer.com/chapter/10.1007%2F978-3-319-39696-5_12">"Minimizing overprocessing waste in business processes via predictive activity ordering"</a> by Ilya Verenich, Marlon Dumas, Marcello La Rosa, Fabrizio Maggi, and Chiara Di Francescomarino.</p>
+      <p>Following are the supplementary material for the article <a href="http://example.com">"Predictive Business Process Monitoring with
+LSTM Neural Networks
+"</a> by Niek Tax, Ilya Verenich, Marlon Dumas and Marcello La Rosa.</p>
 
 <p><strong>Requirements:</strong><br>
-R 3.2.0 or above; internet connection to download the datasets and possibly missing packages</p>
+Python 2; </p>
 
 <p><strong>USAGE:</strong><br>
-<code>cd OptimizeKnockout</code><br>
-<code>Rscript OptimizeKnockout.R inputData koActivities usefulFeatures disallowed_permutation learner sampling_method n retrain</code></p>
-
-<p><strong>Example usage:</strong><br>
-<code>Rscript OptimizeKnockout.R inputData="Bondora.csv" learner="svm" sampling_method="under" n=3</code></p>
+<code>python train.py</code><br>
+this will produce models</p>
 
 <p><strong>Input:</strong><br>
-Event log in the csv format. Only "Bondora.csv" and "Envpermit.csv" have been tested so far  </p>
+Event log in the csv format.</p>
 
 <p><strong>Output:</strong></p>
 
 <ul>
-<li>n csv files, containing optimal permutation, in the coded form, for each ongoing case according to our suggestion (+ according to the constant probabilities baseline + random), number of checks actually performed for each case and the minimum possible number of checks</li>
-<li>file <em>*_permutations.txt</em> with the possible permutations and their codes</li>
-<li>file <em>*_summary.txt</em> containing total number of checks needed for all test cases, actual total number of performed checks and distribution of the number of checks performed across test cases</li>
+<li>h5 models</li>
+<li>files</li>
 </ul>
 
 <p><strong>Parameters:</strong>   </p>
 
 <ul>
 <li>
-<em>koActivities</em> - list of checks in the knock-out sections. For example, <em>koActivities='c("checkIncome","checkIdentity")'</em>
-</li>
-<li>
-<em>usefulFeatures</em> - list of features to be used for constructing predicitve models</li>
-<li>
-<em>disallowed_permutation</em> - disallowed combination(s) of checks</li>
-<li>
-<em>learner</em> - classification model for reject probabilities, <em>"rf"</em> for random forest, <em>"tree"</em> for decision tree and <em>"svm"</em> for SVM</li>
-<li>
-<em>sampling_method</em> - sampling of training cases wrt class label to achieve class balance, <em>"under"</em> for undersampling, <em>"none"</em> for none, <em>"over"</em> for oversampling. Default <em>"under"</em>
-</li>
-<li>
-<em>n</em> - number of random iterations of the whole algorithm (training and test files are regenerated at each run). Default 1</li>
-<li>
-<em>retrain</em> - logical flag indicating whether to retrain predictive models. Default TRUE</li>
+<em>to-be-filled</em> - </li>
 </ul>
 
-<p><strong>Note:</strong> If using <em>inputData="Bondora.csv"</em> or <em>inputData="Envpermit.csv"</em>, all other paramaters are optional </p>
-
-<p><strong>Common problems:</strong><br>
-If you receive an error <em>"'Rscript' is not recognized as an internal or external command, operable program or batch file"</em>, please add the path to the executables for R to the system variable "PATH" (on Windows typically <em>'C:\Program Files (x64)\R\R-3.x.y'</em>)</p>
+<p><strong>Note:</strong> </p>
 
 <p>Note that this code is a supplementary material and should be modified for the use with other datasets</p>
 
