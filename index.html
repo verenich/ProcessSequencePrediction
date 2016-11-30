@@ -34,12 +34,12 @@ LSTM Neural Networks"</a> by Niek Tax, Ilya Verenich, Marlon Dumas and Marcello 
 <p>The script trains an <a href="https://en.wikipedia.org/wiki/Long_short-term_memory">LSTM</a>- or <a href="https://en.wikipedia.org/wiki/Recurrent_neural_network">RNN</a>-based predictive model using the data about historical, i.e. completed process instances. Next, the models are evaluated on running, i.e. incomplete instances.</p>
 
 <p><strong>Requirements:</strong><br>
-Python 2; </p>
+Python 2. Additionally, the following Python libraries are required to run the code: <em>keras</em> (as a backend, you need either <em>theano</em> or <em>tensorflow</em>), <em>unicodecsv</em>, <em>numpy</em>, <em>jellyfish</em>, <em>sklearn</em>, <em>matplotlib</em>.</p>
 
 <p><strong>USAGE:</strong><br>
 <strong>Model training:</strong><br>
 <code>python train.py</code><br>
-This script trains an LSTM model on one of the data files in the data folder of this repository. The input file can be changed to another file from the data folder in by changing the path in both line 47 and 124. It is recommended to run this script on GPU, as recurrent networks are quite computationally intensive.</p>
+This script trains an LSTM model on one of the data files in the data folder of this repository (by default, we do training on the <em>helpdesk</em> event log). The input file can be changed to another file from the data folder in by changing the path in both line 47 and 124. It is recommended to run this script on GPU, as recurrent networks are quite computationally intensive. </p>
 
 <p><strong>Evaluation:</strong><br>
 <code>python evaluation.py</code><br>
