@@ -8,7 +8,7 @@ Author: Niek Tax
 from __future__ import division
 import unicodecsv
 
-csvfile = open('output_files/folds/fold3_preds_bpi13_indicent.csv', 'r')
+csvfile = open('output_files/folds/fold3_preds.csv', 'r')
 r = unicodecsv.reader(csvfile ,encoding='utf-8')
 r.next() # header
 vals = dict()
