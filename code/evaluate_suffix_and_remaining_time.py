@@ -194,7 +194,6 @@ def encode(sentence, times, times3, maxlen=maxlen):
         X[0, t+leftpad, len(chars)+2] = times2[t]/divisor2
         X[0, t+leftpad, len(chars)+3] = timesincemidnight.seconds/86400
         X[0, t+leftpad, len(chars)+4] = times3[t].weekday()/7
-    #print(X)
     return X
 
 def getSymbol(predictions):
