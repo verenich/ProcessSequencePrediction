@@ -51,9 +51,9 @@ This script takes as input the LSTM or RNN weights found by <code>train.py</code
 
 <p><strong>Known issues:</strong>
 On some systems, the scripts cause an error <em>UnicodeEncodeError: 'ascii' codec can't encode character u'\xa7' in position 0: ordinal not in range(128)</em>. As a temporary solution, you can uncomment the following lines in the beginning of a script:<br>
-<code>import sys</code>
-<code>reload(sys)</code>
-<code>sys.setdefaultencoding("utf-8")</code></p>
+<code>import sys</code><br>
+<code>reload(sys)</code><br>
+<code>sys.setdefaultencoding("utf-8")</code>  </p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/verenich/ProcessSequencePrediction">Predictive Business Process Monitoring with LSTM Neural Networks</a> is maintained by <a href="https://github.com/verenich">verenich</a>.</span>
