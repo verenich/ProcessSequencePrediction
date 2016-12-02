@@ -218,7 +218,7 @@ three_ahead_pred = []
 
 
 # make predictions
-with open('output_files/folds/fold3_preds.csv', 'wb') as csvfile:
+with open('output_files/folds/results_suffix_and_remaining_time.csv', 'wb') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
     spamwriter.writerow(["Prefix length", "Groud truth", "Predicted", "Levenshtein", "Damerau", "Jaccard", "Ground truth times", "Predicted times", "RMSE", "MAE", "Median AE"])
     for prefix_size in range(2,maxlen):
@@ -262,7 +262,10 @@ with open('output_files/folds/fold3_preds.csv', 'wb') as csvfile:
                 output.append(unicode(ground_truth).encode("utf-8"))
                 output.append(unicode(predicted).encode("utf-8"))
                 output.append(1 - distance.nlevenshtein(predicted, ground_truth))
-                output.append(1 - (jellyfish.damerau_levenshtein_distance(unicode(predicted), unicode(ground_truth)) / max(len(predicted),len(ground_truth))))
+                dls = 1 - (jellyfish.damerau_levenshtein_distance(unicode(predicted), unicode(ground_truth)) / max(len(predicted),len(ground_truth)))
+                if dls<0:
+                    dls=0 # we encountered problems with Damerau-Levenshtein Similarity on some linux machines where the default character encoding of the operating system caused it to be negative, this should never be the case
+                output.append(dls)
                 output.append(1 - distance.jaccard(predicted, ground_truth))
                 output.append(ground_truth_t)
                 output.append(total_predicted_time)
