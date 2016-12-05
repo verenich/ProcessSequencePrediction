@@ -1,6 +1,6 @@
 '''
-this script takes as input the output of evaluate.py
-therefore, evaluate.py needs to be executed first
+this script takes as input the output of evaluate_suffix_and_remaining_time.py
+therefore, the latter needs to be executed first
 
 Author: Niek Tax
 '''
@@ -8,7 +8,8 @@ Author: Niek Tax
 from __future__ import division
 import unicodecsv
 
-csvfile = open('output_files/folds/fold3_preds.csv', 'r')
+eventlog = "helpdesk.csv"
+csvfile = open('output_files/results/suffix_and_remaining_time_%s' % eventlog, 'r')
 r = unicodecsv.reader(csvfile ,encoding='utf-8')
 r.next() # header
 vals = dict()

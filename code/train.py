@@ -1,7 +1,7 @@
 '''
 this script trains an LSTM model on one of the data files in the data folder of
 this repository. the input file can be changed to another file from the data folder
-in by changing the path in both line 47 and 124.
+by changing its name in line 46.
 
 it is recommended to run this script on GPU, as recurrent networks are quite 
 computationally intensive.
@@ -43,8 +43,9 @@ times2 = []
 numlines = 0
 casestarttime = None
 lasteventtime = None
+eventlog = "helpdesk.csv"
 
-csvfile = open('../data/helpdesk.csv', 'r')
+csvfile = open('../data/%s' % eventlog, 'r')
 spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 next(spamreader, None)  # skip the headers
 ascii_offset = 161
@@ -121,7 +122,7 @@ target_indices_char = dict((i, c) for i, c in enumerate(target_chars))
 print(indices_char)
 
 
-csvfile = open('../data/helpdesk.csv', 'r')
+csvfile = open('../data/%s' % eventlog, 'r')
 spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 next(spamreader, None)  # skip the headers
 lastcase = ''
