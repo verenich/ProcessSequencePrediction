@@ -31,7 +31,7 @@ LSTM Neural Networks"</a> by Niek Tax, Ilya Verenich, <a href="http://www.marcel
 <li>Prediction of the remaining cycle time of an instance</li>
 </ul>
 
-<p>The scripts trains an <a href="https://en.wikipedia.org/wiki/Long_short-term_memory">LSTM</a>- or <a href="https://en.wikipedia.org/wiki/Recurrent_neural_network">RNN</a>-based predictive model using the data about historical, i.e. completed process instances. Next, the models are evaluated on running, i.e. incomplete instances.</p>
+<p>The scripts trains a <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">Long Short Term Memory (LSTM)</a>-based predictive model using the data about historical, i.e. completed process instances. Next, the models are evaluated on running, i.e. incomplete instances.</p>
 
 <p><strong>Requirements:</strong><br>
 Python 2. Additionally, the following Python libraries are required to run the code: <a href="https://keras.io/"><em>keras</em></a> (as a backend, you need either <em>theano</em> or <em>tensorflow</em>), <em>unicodecsv</em>, <em>numpy</em>, <em>jellyfish</em>, <em>sklearn</em>, <em>matplotlib</em>, <em>h5py</em>.<br>
@@ -56,13 +56,7 @@ This script evaluates the performance of the next event prediction (not the whol
 <p><strong>Known issues:</strong></p>
 
 <ul>
-<li>On some systems, the scripts cause an error <em>UnicodeEncodeError: 'ascii' codec can't encode character u'\xa7' in position 0: ordinal not in range(128)</em>. As a temporary solution, you can include the following lines in the beginning of a script:<br>
-<code>import sys</code><br>
-<code>reload(sys)</code><br>
-<code>sys.setdefaultencoding("utf-8")</code><br>
-</li>
-<li>
-<a href="https://github.com/jamesturk/jellyfish/issues/55">issue</a> in the <em>jellyfish</em> package that calculates Damerau-Levenshtein distance may appear in logs with a very high number of activity types</li>
+<li>If you receive an error <em>UnicodeEncodeError: 'ascii' codec can't encode character u'\xa7' in position 0: ordinal not in range(128)</em>, make sure you are using the latest version of the <em>jellyfish</em> package (0.5.6 should work fine)</li>
 </ul>
 
       <footer class="site-footer">
