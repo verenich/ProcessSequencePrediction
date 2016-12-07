@@ -13,7 +13,7 @@ import copy
 import numpy as np
 import distance
 from itertools import izip
-import jellyfish
+from jellyfish._jellyfish import damerau_levenshtein_distance
 import unicodecsv
 from sklearn import metrics
 from math import sqrt
@@ -263,7 +263,7 @@ with open('output_files/results/suffix_and_remaining_time_%s' % eventlog, 'wb') 
                 output.append(unicode(ground_truth).encode("utf-8"))
                 output.append(unicode(predicted).encode("utf-8"))
                 output.append(1 - distance.nlevenshtein(predicted, ground_truth))
-                dls = 1 - (jellyfish.damerau_levenshtein_distance(unicode(predicted), unicode(ground_truth)) / max(len(predicted),len(ground_truth)))
+                dls = 1 - (damerau_levenshtein_distance(unicode(predicted), unicode(ground_truth)) / max(len(predicted),len(ground_truth)))
                 if dls<0:
                     dls=0 # we encountered problems with Damerau-Levenshtein Similarity on some linux machines where the default character encoding of the operating system caused it to be negative, this should never be the case
                 output.append(dls)
