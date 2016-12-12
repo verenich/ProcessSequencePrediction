@@ -39,7 +39,10 @@ Note you might need the latest version of <em>keras</em> to run the code. Instal
 <code>pip install git+git://github.com/fchollet/keras.git</code></p>
 
 <p><strong>USAGE:</strong><br>
-<strong>Model training:</strong><br>
+<strong>Data format</strong><br>
+The tool assumes the input is a complete log of all traces in the CSV format wherein the first column is a case ID, then activity name or ID and finally the activity timestamp. Then, this input log is temporally split on 66% (training set) vs 34% (test set), and on the test set the tool evaluates prediction performance for every size of a partial trace, e.g a test trace cut at the 2nd event, the same trace cut at the 3rd event and so on, along all four prediction tasks. We provide sample datasets, including those used in the paper, in the <em>data</em> folder.</p>
+
+<p><strong>Model training:</strong><br>
 <code>python train.py</code><br>
 This script trains a two-layer LSTM model with one shared layer on one of the data files in the data folder of this repository (by default, on the <a href="https://data.mendeley.com/datasets/39bp3vv62t/1"><em>helpdesk</em> event log</a>). To change the input file to another one from the data folder, indicate its name in line 46. It is recommended to run this script on GPU, as recurrent networks are quite computationally intensive. </p>
 
