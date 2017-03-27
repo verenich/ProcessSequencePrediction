@@ -41,7 +41,7 @@ If you the code from this repository, please cite the original paper:
 @inproceedings{Tax2017,
   title={Predictive business process monitoring with {LSTM} neural networks},
   author={Tax, Niek and Verenich, Ilya and La Rosa, Marcello and Dumas, Marlon},
-  booktitle={Proceedings of the International Conference on Advanced Information Systems Engineering},
+  booktitle={Proceedings of the 29th International Conference on Advanced Information Systems Engineering},
   year={2017},
   pages={To appear.},
   publisher={Springer}
