@@ -15,7 +15,6 @@ from keras.layers.core import Dense
 from keras.layers.recurrent import LSTM, GRU, SimpleRNN
 from keras.layers import Input
 from keras.utils.data_utils import get_file
-from keras.regularizers import WeightRegularizer
 from keras.optimizers import Nadam
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from keras.layers.normalization import BatchNormalization
