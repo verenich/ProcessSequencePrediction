@@ -1,5 +1,5 @@
 Following is the supplementary material for the article ["Predictive Business Process Monitoring with
-LSTM Neural Networks"](https://arxiv.org/abs/1612.02130) by [Niek Tax](https://scholar.google.com.au/citations?user=XkRvCC4AAAAJ&hl=en&oi=ao), [Ilya Verenich](https://scholar.google.com.au/citations?user=xRa_fyMAAAAJ&hl=en&oi=ao), [Marcello La Rosa](http://www.marcellolarosa.com/) and [Marlon Dumas](http://kodu.ut.ee/~dumas/).
+LSTM Neural Networks"](https://arxiv.org/abs/1612.02130) by [Niek Tax](https://scholar.google.com.au/citations?user=XkRvCC4AAAAJ&hl=en&oi=ao), [Ilya Verenich](https://scholar.google.com.au/citations?user=xRa_fyMAAAAJ&hl=en&oi=ao), [Marcello La Rosa](http://www.marcellolarosa.com/) and [Marlon Dumas](http://kodu.ut.ee/~dumas/) presented at the [29th International Conference on Advanced Information Systems Engineering](http://caise2017.paluno.de/welcome/)
 
 The code provided in this repository can be readily used to perform the following predictive tasks:
 * Prediction of the next type of activity to be executed in a running process instance
