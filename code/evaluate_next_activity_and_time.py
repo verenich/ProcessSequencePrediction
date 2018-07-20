@@ -32,6 +32,7 @@ lastcase = ''
 line = ''
 firstLine = True
 lines = []
+caseids = []
 timeseqs = []
 timeseqs2 = []
 times = []
@@ -42,6 +43,7 @@ lasteventtime = None
 for row in spamreader:
     t = time.strptime(row[2], "%Y-%m-%d %H:%M:%S")
     if row[0]!=lastcase:
+        caseids.append(row[0])
         casestarttime = t
         lasteventtime = t
         lastcase = row[0]
@@ -75,14 +77,17 @@ print('divisor2: {}'.format(divisor2))
 
 elems_per_fold = int(round(numlines/3))
 fold1 = lines[:elems_per_fold]
+fold1_c = caseids[:elems_per_fold]
 fold1_t = timeseqs[:elems_per_fold]
 fold1_t2 = timeseqs2[:elems_per_fold]
 
 fold2 = lines[elems_per_fold:2*elems_per_fold]
+fold2_c = caseids[elems_per_fold:2*elems_per_fold]
 fold2_t = timeseqs[elems_per_fold:2*elems_per_fold]
 fold2_t2 = timeseqs2[elems_per_fold:2*elems_per_fold]
 
 lines = fold1 + fold2
+caseids = fold1_c + fold2_c
 lines_t = fold1_t + fold2_t
 lines_t2 = fold1_t2 + fold2_t2
 
@@ -110,6 +115,7 @@ lastcase = ''
 line = ''
 firstLine = True
 lines = []
+caseids = []
 timeseqs = []  # relative time since previous event
 timeseqs2 = [] # relative time since case start
 timeseqs3 = [] # absolute time of previous event
@@ -125,6 +131,7 @@ next(spamreader, None)  # skip the headers
 for row in spamreader:
     t = time.strptime(row[2], "%Y-%m-%d %H:%M:%S")
     if row[0]!=lastcase:
+        caseids.append(row[0])
         casestarttime = t
         lasteventtime = t
         lastcase = row[0]
@@ -158,12 +165,14 @@ timeseqs3.append(times3)
 numlines+=1
 
 fold3 = lines[2*elems_per_fold:]
+fold3_c = caseids[2*elems_per_fold:]
 fold3_t = timeseqs[2*elems_per_fold:]
 fold3_t2 = timeseqs2[2*elems_per_fold:]
 fold3_t3 = timeseqs3[2*elems_per_fold:]
 #fold3_t4 = timeseqs4[2*elems_per_fold:]
 
 lines = fold3
+caseids = fold3_c
 lines_t = fold3_t
 lines_t2 = fold3_t2
 lines_t3 = fold3_t3
@@ -219,10 +228,10 @@ three_ahead_pred = []
 # make predictions
 with open('output_files/results/next_activity_and_time_%s' % eventlog, 'wb') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    spamwriter.writerow(["Prefix length", "Groud truth", "Predicted", "Levenshtein", "Damerau", "Jaccard", "Ground truth times", "Predicted times", "RMSE", "MAE", "Median AE"])
+    spamwriter.writerow(["CaseID", "Prefix length", "Groud truth", "Predicted", "Levenshtein", "Damerau", "Jaccard", "Ground truth times", "Predicted times", "RMSE", "MAE"])
     for prefix_size in range(2,maxlen):
         print(prefix_size)
-        for line, times, times3 in izip(lines, lines_t, lines_t3):
+        for line, caseid, times, times3 in izip(lines, caseids, lines_t, lines_t3):
             times.append(0)
             cropped_line = ''.join(line[:prefix_size])
             cropped_times = times[:prefix_size]
@@ -266,6 +275,7 @@ with open('output_files/results/next_activity_and_time_%s' % eventlog, 'wb') as 
                 predicted += prediction
             output = []
             if len(ground_truth)>0:
+                output.append(caseid)
                 output.append(prefix_size)
                 output.append(unicode(ground_truth).encode("utf-8"))
                 output.append(unicode(predicted).encode("utf-8"))
@@ -284,7 +294,7 @@ with open('output_files/results/next_activity_and_time_%s' % eventlog, 'wb') as 
                 if len(ground_truth_t)>0 and len(predicted_t)>0:
                     output.append('')
                     output.append(metrics.mean_absolute_error([ground_truth_t[0]], [predicted_t[0]]))
-                    output.append(metrics.median_absolute_error([ground_truth_t[0]], [predicted_t[0]]))
+                    #output.append(metrics.median_absolute_error([ground_truth_t[0]], [predicted_t[0]]))
                 else:
                     output.append('')
                     output.append('')
