@@ -36,14 +36,14 @@ This script evaluates the performance of the next event prediction (not the whol
 * If you receive an error _UnicodeEncodeError: 'ascii' codec can't encode character u'\xa7' in position 0: ordinal not in range(128)_, make sure you are using the latest version of the _jellyfish_ package (0.5.6 should work fine)
 
 **Reference:**
-If you the code from this repository, please cite the original paper:
+If you use the code from this repository, please cite the original paper:
 ```
 @inproceedings{Tax2017,
   title={Predictive business process monitoring with {LSTM} neural networks},
   author={Tax, Niek and Verenich, Ilya and La Rosa, Marcello and Dumas, Marlon},
-  booktitle={Proceedings of the 29th International Conference on Advanced Information Systems Engineering},
+  booktitle={Proceedings of the 29th International Conference on Advanced Information Systems Engineering (CAiSE)},
   year={2017},
-  pages={To appear.},
+  pages={477--492},
   publisher={Springer}
 }
 ```
