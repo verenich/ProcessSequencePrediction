@@ -31,31 +31,41 @@ from itertools import izip
 from datetime import datetime
 from math import log
 
+
+eventlog = "helpdesk.csv"
+
+########################################################################################
+#
+# this part of the code opens the file, reads it into three following variables
+#
+
+lines = [] #these are all the activity seq
+timeseqs = [] #time sequences (differences between two events)
+timeseqs2 = [] #time sequences (differences between the current and first)
+
+#helper variables
 lastcase = ''
 line = ''
 firstLine = True
-lines = []
-timeseqs = []
-timeseqs2 = []
 times = []
 times2 = []
 numlines = 0
 casestarttime = None
 lasteventtime = None
-eventlog = "helpdesk.csv"
+
 
 csvfile = open('../data/%s' % eventlog, 'r')
 spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
 next(spamreader, None)  # skip the headers
 ascii_offset = 161
 
-for row in spamreader:
-    t = time.strptime(row[2], "%Y-%m-%d %H:%M:%S")
-    if row[0]!=lastcase:
+for row in spamreader: #the rows are "CaseID,ActivityID,CompleteTimestamp"
+    t = time.strptime(row[2], "%Y-%m-%d %H:%M:%S") #creates a datetime object from row[2]
+    if row[0]!=lastcase:  #'lastcase' is to save the last executed case for the loop
         casestarttime = t
         lasteventtime = t
         lastcase = row[0]
-        if not firstLine:        
+        if not firstLine:
             lines.append(line)
             timeseqs.append(times)
             timeseqs2.append(times2)
@@ -79,10 +89,18 @@ timeseqs.append(times)
 timeseqs2.append(times2)
 numlines+=1
 
-divisor = np.mean([item for sublist in timeseqs for item in sublist])
+########################################
+
+divisor = np.mean([item for sublist in timeseqs for item in sublist]) #average time between events
 print('divisor: {}'.format(divisor))
-divisor2 = np.mean([item for sublist in timeseqs2 for item in sublist])
+divisor2 = np.mean([item for sublist in timeseqs2 for item in sublist]) #average time between current and first events
 print('divisor2: {}'.format(divisor2))
+
+
+
+#########################################################################################################
+
+# separate training data into 3 parts
 
 elems_per_fold = int(round(numlines/3))
 fold1 = lines[:elems_per_fold]
@@ -97,6 +115,7 @@ fold3 = lines[2*elems_per_fold:]
 fold3_t = timeseqs[2*elems_per_fold:]
 fold3_t2 = timeseqs2[2*elems_per_fold:]
 
+#leave away fold3 for now
 lines = fold1 + fold2
 lines_t = fold1_t + fold2_t
 lines_t2 = fold1_t2 + fold2_t2
@@ -105,10 +124,11 @@ step = 1
 sentences = []
 softness = 0
 next_chars = []
-lines = map(lambda x: x+'!',lines)
-maxlen = max(map(lambda x: len(x),lines))
+lines = map(lambda x: x+'!',lines) #put delimiter symbol
+maxlen = max(map(lambda x: len(x),lines)) #find maximum line size
 
-chars = map(lambda x : set(x),lines)
+# next lines here to get all possible characters for events and annotate them with numbers
+chars = map(lambda x: set(x),lines)
 chars = list(set().union(*chars))
 chars.sort()
 target_chars = copy.copy(chars)
@@ -145,7 +165,7 @@ for row in spamreader:
         casestarttime = t
         lasteventtime = t
         lastcase = row[0]
-        if not firstLine:        
+        if not firstLine:
             lines.append(line)
             timeseqs.append(times)
             timeseqs2.append(times2)
@@ -164,8 +184,8 @@ for row in spamreader:
     timesincemidnight = datetime.fromtimestamp(time.mktime(t))-midnight
     timediff = 86400 * timesincelastevent.days + timesincelastevent.seconds
     timediff2 = 86400 * timesincecasestart.days + timesincecasestart.seconds
-    timediff3 = timesincemidnight.seconds
-    timediff4 = datetime.fromtimestamp(time.mktime(t)).weekday()
+    timediff3 = timesincemidnight.seconds #this leaves only time even occured after midnight
+    timediff4 = datetime.fromtimestamp(time.mktime(t)).weekday() #day of the week
     times.append(timediff)
     times2.append(timediff2)
     times3.append(timediff3)
@@ -189,7 +209,7 @@ fold1_t3 = timeseqs3[:elems_per_fold]
 fold1_t4 = timeseqs4[:elems_per_fold]
 with open('output_files/folds/fold1.csv', 'wb') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    for row, timeseq in izip(fold1, fold1_t):    
+    for row, timeseq in izip(fold1, fold1_t):
         spamwriter.writerow([unicode(s).encode("utf-8") +'#{}'.format(t) for s, t in izip(row, timeseq)])
 
 fold2 = lines[elems_per_fold:2*elems_per_fold]
@@ -201,7 +221,7 @@ with open('output_files/folds/fold2.csv', 'wb') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
     for row, timeseq in izip(fold2, fold2_t):
         spamwriter.writerow([unicode(s).encode("utf-8") +'#{}'.format(t) for s, t in izip(row, timeseq)])
-        
+
 fold3 = lines[2*elems_per_fold:]
 fold3_t = timeseqs[2*elems_per_fold:]
 fold3_t2 = timeseqs2[2*elems_per_fold:]
@@ -236,6 +256,9 @@ for line, line_t, line_t2, line_t3, line_t4 in izip(lines, lines_t, lines_t2, li
     for i in range(0, len(line), step):
         if i==0:
             continue
+
+        #we add iteratively, first symbol of the line, then two first, three...
+
         sentences.append(line[0: i])
         sentences_t.append(line_t[0:i])
         sentences_t2.append(line_t2[0:i])
@@ -270,7 +293,7 @@ for i, sentence in enumerate(sentences):
     for t, char in enumerate(sentence):
         multiset_abstraction = Counter(sentence[:t+1])
         for c in chars:
-            if c==char:
+            if c==char: #this will encode present events to the right places
                 X[i, t+leftpad, char_indices[c]] = 1
         X[i, t+leftpad, len(chars)] = t+1
         X[i, t+leftpad, len(chars)+1] = sentence_t[t]/divisor
